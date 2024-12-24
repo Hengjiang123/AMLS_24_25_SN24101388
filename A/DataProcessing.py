@@ -68,13 +68,13 @@ def preprocess_CNN(images):
     print("mean:",mean, "std:",std)
     return CNN_tensor
 
-# test:
-train_images, val_images, test_images, train_labels, val_labels, test_labels = load_resplit_breastmnist()
-print(len(train_images))
-print(len(val_images))
-print(len(test_images))
-print(len(train_labels))
-print(len(val_labels))
-print(len(test_labels))
-preprocess_SVM_RF(train_images)
-preprocess_CNN(train_images)
+# # test:
+# train_images, val_images, test_images, train_labels, val_labels, test_labels = load_resplit_breastmnist()
+# print(len(train_images))
+# print(len(val_images))
+# print(len(test_images))
+# print(len(train_labels))
+# print(len(val_labels))
+# print(len(test_labels))
+# preprocess_SVM_RF(train_images)
+# preprocess_CNN(train_images)
