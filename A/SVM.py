@@ -8,13 +8,13 @@ def svm_train_gridsearch(train_images, train_labels, C_values=[0.01, 0.1, 1, 10]
     # define the parameter grad
     param_grid = {'C': C_values} # regularization parameter
 
-    # initialize SVC (support Vector Classifier)
-    best_model = SVC(kernel='rbf', probability=True, random_state=random_state) # rbf: radial basis function kernel
+    # initialize base SVC (support Vector Classifier)
+    base_model = SVC(kernel='rbf', probability=True, random_state=random_state) # rbf: radial basis function kernel
     
     skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
 
     grid_search = GridSearchCV(
-        estimator=best_model,
+        estimator=base_model,
         param_grid=param_grid,
         scoring='accuracy',         # use accuracy sorting models
         cv=skf,
