@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
+from A.Evaluation import calculate_metrics
 
 class CNN_A(nn.Module):
     def __init__(self, num_classes=2):
@@ -92,7 +93,7 @@ def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_deca
         val_labels = []
         with torch.no_grad():                   # no gradient used
 
-            
+
             for X_batch, y_batch in val_loader:
                 X_batch = X_batch.to(device)
                 y_batch = y_batch.to(device)
@@ -109,7 +110,7 @@ def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_deca
         metrics_record['val_rec'].append(val_rec)
         metrics_record['val_f1'].append(val_f1)
 
-        print(f"Epoch [{epoch+1}/{num_epochs}] -> "
+        print(f"Epoch [{epoch+1}/{epochs}] -> "
               f"Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}")
     
     return model, metrics_record
