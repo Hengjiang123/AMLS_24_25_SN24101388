@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 
-def svm_train_gridsearch(train_images, train_labels, C_values=[0.01, 0.1, 1, 10], n_splits=3, random_state=42):
+def svm_train_gridsearch_A(train_images, train_labels, C_values=[0.01, 0.1, 1, 10], n_splits=3, random_state=42):
 # use GridSearchCV make Cross-validation and gridsearch for SVM, to get the best C (regularization param)
 # return best model, C and acc
     # define the parameter grad

@@ -3,7 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.metrics import accuracy_score
 
-def rf_train_gridsearch(train_images, train_labels, param_grid=None, n_splits=3, random_state=42):
+def rf_train_gridsearch_A(train_images, train_labels, param_grid=None, n_splits=3, random_state=42):
     # use gridsearch to apply Cross Validation in RF
     # define search grid for RF: K-fold = 3
     if param_grid is None:

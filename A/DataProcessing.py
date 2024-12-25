@@ -44,14 +44,14 @@ def load_resplit_breastmnist(npz_path = 'Datasets/BreastMNIST.npz', train_size=5
 
     return train_images, val_images, test_images, train_labels, val_labels, test_labels
 
-def preprocess_SVM_RF(images):
+def preprocess_SVM_RF_A(images):
     # flat [N,28,28] to [N,784] then normalize to [0,1]
     N = images.shape[0]
     images_flat = images.reshape(N, -1).astype(np.float32)/255.0
     print(type(images_flat))
     return images_flat
 
-def preprocess_CNN(images):
+def preprocess_CNN_A(images):
     #reshape the data to [N, 1, 28, 28] and normalize to [0,1]
     images_float = images.astype(np.float32) / 255.0
     mean = images_float.mean()
