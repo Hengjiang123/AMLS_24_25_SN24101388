@@ -40,8 +40,8 @@ def dataloaders_A(train_images, train_labels, val_images, val_labels, batch_size
         torch.tensor(val_labels, dtype=torch.long)
     )
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True) # train dataset need random shuffle
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False) # val dataset don't need it
 
     return train_loader, val_loader
 
@@ -92,8 +92,6 @@ def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_deca
         val_preds = []
         val_labels = []
         with torch.no_grad():                   # no gradient used
-
-
             for X_batch, y_batch in val_loader:
                 X_batch = X_batch.to(device)
                 y_batch = y_batch.to(device)

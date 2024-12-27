@@ -12,7 +12,7 @@ def load_resplit_breastmnist(npz_path = 'Datasets/BreastMNIST.npz', train_size=5
     train_labels = data['train_labels']     # shape: 546, 1, 1
     val_labels = data['val_labels']         # shape: 78, 1, 1
     test_labels = data['test_labels']       # shape: 156, 1, 1
-    print("data loaded")
+    # print("data loaded")
     
     # merge, and randomly resplit the dataset
     # merge images and labels
@@ -40,7 +40,7 @@ def load_resplit_breastmnist(npz_path = 'Datasets/BreastMNIST.npz', train_size=5
 
     test_images = all_images[end_val:]
     test_labels = all_labels[end_val:]
-    print("data resplited")
+    # print("data resplited")
 
     return train_images, val_images, test_images, train_labels, val_labels, test_labels
 
