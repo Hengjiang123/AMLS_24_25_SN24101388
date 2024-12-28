@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 
-from A.DataProcessing import load_resplit_breastmnist, preprocess_SVM_RF_A, preprocess_CNN_A
-from A.Evaluation import calculate_metrics, plot_metrics_over_epochs
-from A.SVM import svm_train_gridsearch_A
-from A.RandomForest import rf_train_gridsearch_A
-from A.CNN import CNN_A, dataloaders_A, CNN_train_A
+from A.DataProcessing_A import load_resplit_breastmnist, preprocess_SVM_RF_A, preprocess_CNN_A
+from A.Evaluation_A import calculate_metrics_A, plot_metrics_over_epochs_A
+from A.SVM_A import svm_train_gridsearch_A
+from A.RandomForest_A import rf_train_gridsearch_A
+from A.CNN_A import CNN_A, dataloaders_A, CNN_train_A
 
-def main():
+def TaskA():
     ############### Task A ################
     print("\n############### Task A ################\n")
 
@@ -35,12 +35,12 @@ def main():
 
     # Evaluate on val dataset, and calculate 4 matrics
     val_labels_pred_svm = svm_model.predict(val_images_svm_rf)
-    val_acc_svm, val_prec_svm, val_rec_svm, val_f1_svm = calculate_metrics(val_labels, val_labels_pred_svm)
+    val_acc_svm, val_prec_svm, val_rec_svm, val_f1_svm = calculate_metrics_A(val_labels, val_labels_pred_svm)
     print(f"SVM Val dataset: Accuracy={val_acc_svm:.4f}, Precision={val_prec_svm:.4f}, Recall={val_rec_svm:.4f}, F1={val_f1_svm:.4f}") 
     
     # Ecaluate on test dataset, and calculate 4 matrics
     test_labels_pred_svm = svm_model.predict(test_images_svm_rf)
-    test_acc_svm, test_prec_svm, test_rec_svm, test_f1_svm = calculate_metrics(test_labels, test_labels_pred_svm)
+    test_acc_svm, test_prec_svm, test_rec_svm, test_f1_svm = calculate_metrics_A(test_labels, test_labels_pred_svm)
     print(f"SVM Test dataset: Accuracy={test_acc_svm:.4f}, Precision={test_prec_svm:.4f}, Recall={test_rec_svm:.4f}, F1={test_f1_svm:.4f}") 
    
 
@@ -53,12 +53,12 @@ def main():
 
     # Evaluate on val dataset, and calculate 4 matrics
     val_labels_pred_rf = rf_model.predict(val_images_svm_rf)
-    val_acc_rf, val_prec_rf, val_rec_rf, val_f1_rf = calculate_metrics(val_labels, val_labels_pred_rf)
+    val_acc_rf, val_prec_rf, val_rec_rf, val_f1_rf = calculate_metrics_A(val_labels, val_labels_pred_rf)
     print(f"RF Val dataset: Accuracy={val_acc_rf:.4f}, Precision={val_prec_rf:.4f}, Recall={val_rec_rf:.4f}, F1={val_f1_rf:.4f}")
 
     # Evaluate on test dataset, and calculate 4 matrics
     test_labels_pred_rf = rf_model.predict(test_images_svm_rf)
-    test_acc_rf, test_prec_rf, test_rec_rf, test_f1_rf = calculate_metrics(test_labels, test_labels_pred_rf)
+    test_acc_rf, test_prec_rf, test_rec_rf, test_f1_rf = calculate_metrics_A(test_labels, test_labels_pred_rf)
     print(f"RF Test dataset: Accuracy={test_acc_rf:.4f}, Precision={test_prec_rf:.4f}, Recall={test_rec_rf:.4f}, F1={test_f1_rf:.4f}")
 
 
@@ -76,10 +76,10 @@ def main():
 
     # initialize CNN model and train
     cnn_model = CNN_A(num_classes=2)
-    cnn_model, metrics_record_cnn = CNN_train_A(cnn_model, train_loader, val_loader, epochs=10, lr=1e-3, weight_decay=1e-4, device='cpu')
+    cnn_model, metrics_record_cnn = CNN_train_A(cnn_model, train_loader, val_loader, epochs=100, lr=1e-3, weight_decay=1e-4, device='cpu')
 
     # plot recorded metrics when training CNN
-    plot_metrics_over_epochs(metrics_record_cnn, model_name='TaskA-Light-CNN')
+    plot_metrics_over_epochs_A(metrics_record_cnn, model_name='TaskA-Light-CNN')
 
     # package CNN test dataset
     test_dataset = TensorDataset(
@@ -99,7 +99,7 @@ def main():
             all_preds.extend(preds)
             all_labels.extend(y_batch.numpy())
 
-    test_acc_cnn, test_prec_cnn, test_rec_cnn, test_f1_cnn = calculate_metrics(all_labels, all_preds)
+    test_acc_cnn, test_prec_cnn, test_rec_cnn, test_f1_cnn = calculate_metrics_A(all_labels, all_preds)
     print(f"CNN Test dataset: Accuracy={test_acc_cnn:.4f}, Precision={test_prec_cnn:.4f}, Recall={test_rec_cnn:.4f}, F1={test_f1_cnn:.4f}")
 
     # here reoutput metrics of three models in test data and compare their performance
@@ -110,8 +110,16 @@ def main():
     print(f"CNN\t\t{test_acc_cnn:.4f}\t{test_prec_cnn:.4f}\t{test_rec_cnn:.4f}\t{test_f1_cnn:.4f}")
 
 
-
+def TaskB():
     ############### Task B ################
+    print("\n############### Task B ################\n")
+
+
+
+def main():
+    # implement Task A and B 
+    TaskA()
+    TaskB()
 
 if __name__ == "__main__":
     main()

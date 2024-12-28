@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-def calculate_metrics(y_true, y_pred):
+def calculate_metrics_A(y_true, y_pred):
 
     # calculate Accuracy, Precision, Recall, F1 score
     # average ='binary'
@@ -13,7 +13,7 @@ def calculate_metrics(y_true, y_pred):
     f1 = f1_score(y_true, y_pred, average='binary')
     return acc, prec, rec, f1
 
-def plot_metrics_over_epochs(metrics_dict, model_name='CNN'):
+def plot_metrics_over_epochs_A(metrics_dict, model_name='CNN'):
     #    metrics_record = {
     #     'train_acc': [], 'train_prec': [], 'train_rec': [], 'train_f1': [],
     #     'val_acc': [], 'val_prec': [], 'val_rec': [], 'val_f1': []

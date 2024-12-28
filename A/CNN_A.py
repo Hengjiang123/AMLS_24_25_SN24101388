@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
-from A.Evaluation import calculate_metrics
+from A.Evaluation_A import calculate_metrics_A
 
 class CNN_A(nn.Module):
     def __init__(self, num_classes=2):
@@ -81,7 +81,7 @@ def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_deca
             all_labels.extend(labels)
         
         # calculate metrics in train set
-        train_acc, train_prec, train_rec, train_f1 = calculate_metrics(all_labels, all_preds)
+        train_acc, train_prec, train_rec, train_f1 = calculate_metrics_A(all_labels, all_preds)
         metrics_record['train_acc'].append(train_acc)
         metrics_record['train_prec'].append(train_prec)
         metrics_record['train_rec'].append(train_rec)
@@ -102,7 +102,7 @@ def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_deca
                 val_preds.extend(preds)
                 val_labels.extend(labels)
 
-        val_acc, val_prec, val_rec, val_f1 = calculate_metrics(val_labels, val_preds)
+        val_acc, val_prec, val_rec, val_f1 = calculate_metrics_A(val_labels, val_preds)
         metrics_record['val_acc'].append(val_acc)
         metrics_record['val_prec'].append(val_prec)
         metrics_record['val_rec'].append(val_rec)
