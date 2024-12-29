@@ -1,18 +1,24 @@
 import numpy as np
 import torch
 from torchvision import transforms
+from collections import Counter
 
-def load_resplit_breastmnist(npz_path = 'Datasets/BreastMNIST.npz', train_size=546, val_size=78, test_size=156, random_state=42):
+def load_resplit_breastmnist(npz_path = 'Datasets/BreastMNIST.npz', train_size=546, val_size=78, test_size=156, random_state=36):
     # load data
     data = np.load(npz_path)
     # print(data.files) # ['train_images', 'val_images', 'test_images', 'train_labels', 'val_labels', 'test_labels']
     train_images = data['train_images']     # shape: 546, 28, 28
     val_images = data['val_images']         # shape: 78, 28, 28
     test_images = data['test_images']       # shape: 156, 28, 28
-    train_labels = data['train_labels']     # shape: 546, 1, 1
-    val_labels = data['val_labels']         # shape: 78, 1, 1
-    test_labels = data['test_labels']       # shape: 156, 1, 1
+    train_labels = data['train_labels'].reshape(-1)     # shape: 546, 1, 1
+    val_labels = data['val_labels'].reshape(-1)         # shape: 78, 1, 1
+    test_labels = data['test_labels'].reshape(-1)       # shape: 156, 1, 1
     # print("data loaded")
+
+    # # count numbers in different classes
+    # label_counts = Counter(train_labels)
+    # for label in range(2):
+    #     print(f"Class {label}: {label_counts[label]} samples")
     
     # merge, and randomly resplit the dataset
     # merge images and labels
@@ -42,13 +48,17 @@ def load_resplit_breastmnist(npz_path = 'Datasets/BreastMNIST.npz', train_size=5
     test_labels = all_labels[end_val:]
     # print("data resplited")
 
+    # label_counts = Counter(train_labels)
+    # for label in range(2):
+    #     print(f"Class {label}: {label_counts[label]} samples")
+
     return train_images, val_images, test_images, train_labels, val_labels, test_labels
 
 def preprocess_SVM_RF_A(images):
     # flat [N,28,28] to [N,784] then normalize to [0,1]
     N = images.shape[0]
     images_flat = images.reshape(N, -1).astype(np.float32)/255.0
-    print(type(images_flat))
+    # print(type(images_flat))
     return images_flat
 
 def preprocess_CNN_A(images):
@@ -64,11 +74,12 @@ def preprocess_CNN_A(images):
     ])
     # use transform in each images
     CNN_tensor = torch.stack([transform(img) for img in images])
-    print(type(CNN_tensor))
-    print("mean:",mean, "std:",std)
+    # print(type(CNN_tensor))
+    # print("mean:",mean, "std:",std)
     return CNN_tensor
 
 # # test:
+# load_resplit_breastmnist()
 # train_images, val_images, test_images, train_labels, val_labels, test_labels = load_resplit_breastmnist()
 # print(len(train_images))
 # print(len(val_images))

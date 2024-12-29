@@ -32,11 +32,11 @@ class CNN_A(nn.Module):
 def dataloaders_A(train_images, train_labels, val_images, val_labels, batch_size=32):
     # make numpy data to Tensor type by DataLoader
     train_dataset = TensorDataset(
-        torch.tensor(train_images, dtype=torch.float32),
+        train_images.clone().detach().to(torch.float32),
         torch.tensor(train_labels, dtype=torch.long)
     )
     val_dataset = TensorDataset(
-        torch.tensor(val_images, dtype=torch.float32),
+        val_images.clone().detach().to(torch.float32),
         torch.tensor(val_labels, dtype=torch.long)
     )
 
@@ -47,12 +47,10 @@ def dataloaders_A(train_images, train_labels, val_images, val_labels, batch_size
 
 def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_decay=1e-4, device='cpu'):
     # train light CNN, and calculate four metrics for each epochs
-    # use L2 regularization
-
     criterion = nn.CrossEntropyLoss()           # loss function: cross entropy
-    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay) # use L2 regularization (weight_deca)
 
-    # store indexes for each epochs
+    # store metrics for each epochs
     metrics_record = {
         'train_acc': [], 'train_prec': [], 'train_rec': [], 'train_f1': [],
         'val_acc': [], 'val_prec': [], 'val_rec': [], 'val_f1': []
@@ -108,7 +106,6 @@ def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_deca
         metrics_record['val_rec'].append(val_rec)
         metrics_record['val_f1'].append(val_f1)
 
-        print(f"Epoch [{epoch+1}/{epochs}] -> "
-              f"Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}")
+        print(f"Epoch [{epoch+1}/{epochs}] -> "f"Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}")
     
     return model, metrics_record

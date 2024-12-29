@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 def calculate_metrics_A(y_true, y_pred):
 
     # calculate Accuracy, Precision, Recall, F1 score
-    # average ='binary'
+    # average = binary -> binary classification
 
     acc = accuracy_score(y_true, y_pred)
     prec = precision_score(y_true, y_pred, average='binary')
@@ -14,6 +14,7 @@ def calculate_metrics_A(y_true, y_pred):
     return acc, prec, rec, f1
 
 def plot_metrics_over_epochs_A(metrics_dict, model_name='CNN'):
+    # metrics stracture show:
     #    metrics_record = {
     #     'train_acc': [], 'train_prec': [], 'train_rec': [], 'train_f1': [],
     #     'val_acc': [], 'val_prec': [], 'val_rec': [], 'val_f1': []
