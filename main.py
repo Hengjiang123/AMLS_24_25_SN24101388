@@ -51,7 +51,7 @@ def TaskA():
    
 
     ##### Random Forest Training #####
-    print("\n=== Random Forest Training ===")
+    print("\n=== RandomForest Training ===")
 
     # train Random Forest model with cross validation, and get best model and params
     rf_model, rf_best_params, rf_cv_acc = rf_train_gridsearch_A(train_images_svm_rf, train_labels)
@@ -84,7 +84,7 @@ def TaskA():
 
     # initialize CNN model and train
     cnn_model = CNN_A(num_classes=2)
-    cnn_model, metrics_record_cnn = CNN_train_A(cnn_model, train_loader, val_loader, epochs=100, lr=1e-3, weight_decay=1e-4, device='cpu')
+    cnn_model, metrics_record_cnn = CNN_train_A(cnn_model, train_loader, val_loader, epochs=100, lr=1e-3, weight_decay=1e-4, device=device)
 
     # plot recorded metrics when training CNN
     plot_metrics_over_epochs_A(metrics_record_cnn, model_name='TaskA-Light-CNN')
@@ -104,10 +104,11 @@ def TaskA():
     with torch.no_grad():
         for X_batch, y_batch in test_loader:
             X_batch = X_batch.to(device)
+            y_batch = y_batch.to(device)
             outputs = cnn_model(X_batch)
             preds = torch.argmax(outputs, dim=1).cpu().numpy()
             all_preds.extend(preds)
-            all_labels.extend(y_batch.numpy())
+            all_labels.extend(y_batch.cpu().numpy())
 
     test_acc_cnn, test_prec_cnn, test_rec_cnn, test_f1_cnn = calculate_metrics_A(all_labels, all_preds)
     print(f"CNN Test dataset: Accuracy={test_acc_cnn:.4f}, Precision={test_prec_cnn:.4f}, Recall={test_rec_cnn:.4f}, F1={test_f1_cnn:.4f}")
@@ -132,7 +133,7 @@ def TaskB():
     print("Test:", test_images.shape, test_labels.shape)
 
     ##### RandomForest Training #####
-    print("\n=== SVM Training ===")
+    print("\n=== RandomForest Training ===")
 
     # Preprocess, plant and normalization 
     train_images_rf = preprocess_RF_B(train_images)
@@ -179,7 +180,7 @@ def TaskB():
         model=resnet_model,
         train_loader=train_loader,
         val_loader=val_loader,
-        epochs=10,             
+        epochs=100,             
         lr=1e-3,
         weight_decay=1e-4,
         device=device
@@ -195,6 +196,7 @@ def TaskB():
     with torch.no_grad():
         for X_batch, y_batch in test_loader:
             X_batch = X_batch.to(device)
+            y_batch = y_batch.to(device)
             outputs = resnet_model(X_batch)
             preds = torch.argmax(outputs, dim=1).cpu().numpy()
             labels = y_batch.cpu().numpy()
@@ -214,7 +216,16 @@ def TaskB():
 
 
 def main():
+    # verify GPU
+
+    # print(torch.__version__)  # check PyTorch version
+    # print(torch.version.cuda)  # check support CUDA version
+
+    # print(torch.cuda.is_available())  # return True means GPU avaliable
+    # print(torch.cuda.get_device_name(0)) 
+
     # implement Task A and Task B 
+
     # TaskA()
     TaskB()
 
