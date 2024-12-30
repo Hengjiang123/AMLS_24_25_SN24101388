@@ -226,7 +226,7 @@ def main():
 
     # implement Task A and Task B 
 
-    # TaskA()
+    TaskA()
     TaskB()
 
 if __name__ == "__main__":
