@@ -1,7 +1,6 @@
 import numpy as np
 import torch
 from torchvision import transforms
-from collections import Counter
 
 def load_resplit_breastmnist(npz_path = 'Datasets/BreastMNIST.npz', train_size=546, val_size=78, test_size=156, random_state=36):
     # load data
@@ -14,43 +13,34 @@ def load_resplit_breastmnist(npz_path = 'Datasets/BreastMNIST.npz', train_size=5
     val_labels = data['val_labels'].reshape(-1)         # shape: 78, 1, 1
     test_labels = data['test_labels'].reshape(-1)       # shape: 156, 1, 1
     # print("data loaded")
-
-    # # count numbers in different classes
-    # label_counts = Counter(train_labels)
-    # for label in range(2):
-    #     print(f"Class {label}: {label_counts[label]} samples")
     
-    # merge, and randomly resplit the dataset
-    # merge images and labels
-    all_images = np.concatenate([train_images, val_images, test_images], axis=0)
-    all_labels = np.concatenate([train_labels, val_labels, test_labels], axis=0)
+    # # merge, and randomly resplit the dataset
+    # # merge images and labels
+    # all_images = np.concatenate([train_images, val_images, test_images], axis=0)
+    # all_labels = np.concatenate([train_labels, val_labels, test_labels], axis=0)
 
-    # reshap and random data
-    all_labels = all_labels.reshape(-1)
-    np.random.seed(random_state)
-    total_size = all_images.shape[0]
-    indices = np.random.permutation(total_size)
+    # # reshap and random data
+    # all_labels = all_labels.reshape(-1)
+    # np.random.seed(random_state)
+    # total_size = all_images.shape[0]
+    # indices = np.random.permutation(total_size)
 
-    all_images = all_images[indices]
-    all_labels = all_labels[indices]
+    # all_images = all_images[indices]
+    # all_labels = all_labels[indices]
 
-    # resplit data
-    end_train = train_size
-    end_val = train_size + val_size
+    # # resplit data
+    # end_train = train_size
+    # end_val = train_size + val_size
 
-    train_images = all_images[:end_train]
-    train_labels = all_labels[:end_train]
+    # train_images = all_images[:end_train]
+    # train_labels = all_labels[:end_train]
 
-    val_images = all_images[end_train:end_val]
-    val_labels = all_labels[end_train:end_val]
+    # val_images = all_images[end_train:end_val]
+    # val_labels = all_labels[end_train:end_val]
 
-    test_images = all_images[end_val:]
-    test_labels = all_labels[end_val:]
-    # print("data resplited")
-
-    # label_counts = Counter(train_labels)
-    # for label in range(2):
-    #     print(f"Class {label}: {label_counts[label]} samples")
+    # test_images = all_images[end_val:]
+    # test_labels = all_labels[end_val:]
+    # # print("data resplited")
 
     return train_images, val_images, test_images, train_labels, val_labels, test_labels
 

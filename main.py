@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 from torchvision.models import ResNet34_Weights
+from collections import Counter
 
 from A.DataProcessing_A import load_resplit_breastmnist, preprocess_SVM_RF_A, preprocess_CNN_A
 from A.Evaluation_A import calculate_metrics_A, plot_metrics_over_epochs_A
@@ -27,6 +28,10 @@ def TaskA():
     print("Val:", val_images.shape, val_labels.shape)
     print("Test:", test_images.shape, test_labels.shape)
 
+    print("\nTrain labels distribution:", Counter(train_labels))
+    print("Val labels distribution:", Counter(val_labels))
+    print("Test labels distribution:", Counter(test_labels))
+
     # Preprocess, plant and normalization 
     train_images_svm_rf = preprocess_SVM_RF_A(train_images) 
     val_images_svm_rf = preprocess_SVM_RF_A(val_images)
@@ -38,6 +43,11 @@ def TaskA():
     # Make cross validation on train dataset to get best C, then use C train the model
     svm_model, svm_best_C, svm_cv_acc = svm_train_gridsearch_A(train_images_svm_rf, train_labels)
     print(f"Best C = {svm_best_C}, SVM_cv_acc = {svm_cv_acc:.4f}")
+
+    # Evaluate on TRAIN dataset
+    train_labels_pred_svm = svm_model.predict(train_images_svm_rf)
+    train_acc_svm, train_prec_svm, train_rec_svm, train_f1_svm = calculate_metrics_A(train_labels, train_labels_pred_svm)
+    print(f"SVM Train dataset: Accuracy={train_acc_svm:.4f}, Precision={train_prec_svm:.4f}, Recall={train_rec_svm:.4f}, F1={train_f1_svm:.4f}") 
 
     # Evaluate on val dataset, and calculate 4 matrics
     val_labels_pred_svm = svm_model.predict(val_images_svm_rf)
@@ -56,6 +66,11 @@ def TaskA():
     # train Random Forest model with cross validation, and get best model and params
     rf_model, rf_best_params, rf_cv_acc = rf_train_gridsearch_A(train_images_svm_rf, train_labels)
     print(f"RF best params={rf_best_params}, RF_cv_acc={rf_cv_acc:.4f}")
+    
+    # Evaluate on TRAIN dataset
+    train_labels_pred_rf = rf_model.predict(train_images_svm_rf)
+    train_acc_rf, train_prec_rf, train_rec_rf, train_f1_rf = calculate_metrics_A(train_labels, train_labels_pred_rf)
+    print(f"RF Train dataset: Accuracy={train_acc_rf:.4f}, Precision={train_prec_rf:.4f}, Recall={train_rec_rf:.4f}, F1={train_f1_rf:.4f}")
 
     # Evaluate on val dataset, and calculate 4 matrics
     val_labels_pred_rf = rf_model.predict(val_images_svm_rf)
@@ -94,7 +109,6 @@ def TaskA():
         test_images_cnn.clone().detach().to(torch.float32),
         torch.tensor(test_labels, dtype=torch.long)
     )
-
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
     # evaluate on test dataset

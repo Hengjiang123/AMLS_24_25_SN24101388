@@ -43,6 +43,9 @@ def dataloaders_A(train_images, train_labels, val_images, val_labels, batch_size
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True) # train dataset need random shuffle
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False) # val dataset don't need it
 
+    # print(f"Number of batches in train_loader: {len(train_loader)}")
+    # print(f"Number of batches in val_loader: {len(val_loader)}")
+
     return train_loader, val_loader
 
 def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_decay=1e-4, device='cpu'):
@@ -53,15 +56,19 @@ def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_deca
     # store metrics for each epochs
     metrics_record = {
         'train_acc': [], 'train_prec': [], 'train_rec': [], 'train_f1': [],
-        'val_acc': [], 'val_prec': [], 'val_rec': [], 'val_f1': []
+        'val_acc': [],   'val_prec': [],   'val_rec': [],   'val_f1': [],
+        'train_loss': [], 'val_loss': []
     }
 
     model.to(device)
+    print(f"CNN Learning Rate: {lr:.4f}")
 
     for epoch in range(epochs):
         model.train()                           # set model as training model
         all_preds = []
         all_labels = []
+        total_train_loss = 0.0
+        num_train_batches = 0
         for X_batch, y_batch in train_loader:
             X_batch = X_batch.to(device)
             y_batch = y_batch.to(device)
@@ -72,11 +79,17 @@ def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_deca
             loss.backward()                     # backward propagation
             optimizer.step()                    # update parameters
 
+            total_train_loss += loss.item()
+            num_train_batches += 1
+
             preds = torch.argmax(outputs, dim=1).detach().cpu().numpy()
             labels = y_batch.detach().cpu().numpy()
 
             all_preds.extend(preds)
             all_labels.extend(labels)
+        
+        # calculate average train loss
+        avg_train_loss = total_train_loss / num_train_batches
         
         # calculate metrics in train set
         train_acc, train_prec, train_rec, train_f1 = calculate_metrics_A(all_labels, all_preds)
@@ -84,28 +97,42 @@ def CNN_train_A(model, train_loader, val_loader, epochs=10, lr=1e-3, weight_deca
         metrics_record['train_prec'].append(train_prec)
         metrics_record['train_rec'].append(train_rec)
         metrics_record['train_f1'].append(train_f1)
+        metrics_record['train_loss'].append(avg_train_loss)
 
         # validation dataset 
         model.eval()                            # set model as validate model
         val_preds = []
         val_labels = []
+        total_val_loss = 0.0
+        num_val_batches = 0
         with torch.no_grad():                   # no gradient used
             for X_batch, y_batch in val_loader:
                 X_batch = X_batch.to(device)
                 y_batch = y_batch.to(device)
                 outputs = model(X_batch)
+                loss = criterion(outputs, y_batch)
+
+                total_val_loss += loss.item()
+                num_val_batches += 1
+
                 preds = torch.argmax(outputs, dim=1).cpu().numpy()
                 labels = y_batch.cpu().numpy()
 
                 val_preds.extend(preds)
                 val_labels.extend(labels)
 
+             # calculate average val loss
+        avg_val_loss = total_val_loss / num_val_batches
+
         val_acc, val_prec, val_rec, val_f1 = calculate_metrics_A(val_labels, val_preds)
         metrics_record['val_acc'].append(val_acc)
         metrics_record['val_prec'].append(val_prec)
         metrics_record['val_rec'].append(val_rec)
         metrics_record['val_f1'].append(val_f1)
+        metrics_record['val_loss'].append(avg_val_loss)
 
-        print(f"Epoch [{epoch+1}/{epochs}] -> "f"Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}")
+        print(f"Epoch [{epoch+1}/{epochs}] -> "
+              f"Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}, "
+              f"Train Loss: {avg_train_loss:.4f}, Val Loss: {avg_val_loss:.4f}")
     
     return model, metrics_record
