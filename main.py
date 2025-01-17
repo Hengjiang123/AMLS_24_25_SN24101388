@@ -146,6 +146,10 @@ def TaskB():
     print("Val:", val_images.shape, val_labels.shape)
     print("Test:", test_images.shape, test_labels.shape)
 
+    print("\nTrain labels distribution:", Counter(train_labels))
+    print("Val labels distribution:", Counter(val_labels))
+    print("Test labels distribution:", Counter(test_labels))
+
     ##### RandomForest Training #####
     print("\n=== RandomForest Training ===")
 
@@ -157,6 +161,11 @@ def TaskB():
     # Make cross validation on train dataset to get best params, then use it train the model
     rf_model, rf_best_params, rf_cv_acc = rf_train_gridsearch_B(train_images_rf, train_labels)
     print(f"RF best params={rf_best_params}, RF_cv_acc={rf_cv_acc:.4f}")
+
+    # Evaluate on TRAIN dataset
+    train_rf_pred = rf_model.predict(train_images_rf)
+    train_acc_rf, train_prec_rf, train_rec_rf, train_f1_rf = calculate_metrics_B(train_labels, train_rf_pred)
+    print(f"RF Train dataset: Accuracy={train_acc_rf:.4f}, Precision={train_prec_rf:.4f}, Recall={train_rec_rf:.4f}, F1={train_f1_rf:.4f}")
 
     # Evaluate on val dataset, and calculate 4 matrics
     val_rf_pred = rf_model.predict(val_images_rf)
@@ -245,3 +254,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

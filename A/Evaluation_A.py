@@ -26,7 +26,7 @@ def plot_metrics_over_epochs_A(metrics_dict, model_name='CNN'):
     plt.figure(figsize=(10, 6))
     plt.plot(epochs, metrics_dict['train_loss'], label='Train Loss', color='blue')
     plt.plot(epochs, metrics_dict['val_loss'], label='Val Loss', color='orange')
-    plt.title(f"{model_name} - Loss over Epochs", fontsize=16)
+    plt.title(f"{model_name} - Learning Curve", fontsize=16)
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
     plt.legend()
@@ -34,7 +34,7 @@ def plot_metrics_over_epochs_A(metrics_dict, model_name='CNN'):
     plt.show()
 
     fig, axs = plt.subplots(2, 2, figsize=(12, 10))
-    fig.suptitle(f"{model_name} Training Metrics", fontsize=16)
+    fig.suptitle(f"{model_name} Task A Training Metrics", fontsize=16)
     # Accuracy
     axs[0, 0].plot(epochs, metrics_dict['train_acc'], label='Train Accuracy')
     axs[0, 0].plot(epochs, metrics_dict['val_acc'], label='Val Accuracy')
