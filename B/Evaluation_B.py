@@ -37,7 +37,7 @@ def plot_metrics_over_epochs_B(metrics_dict, model_name='TaskB-ResNet34'):
     plt.show()
 
     fig, axs = plt.subplots(2, 2, figsize=(10, 8))
-    fig.suptitle(f"{model_name} Task A Training Metrics", fontsize=16)
+    fig.suptitle(f"{model_name} Task B Training Metrics", fontsize=16)
     # Accuracy
     axs[0, 0].plot(epochs, metrics_dict['train_acc'], label='Train Accuracy')
     axs[0, 0].plot(epochs, metrics_dict['val_acc'], label='Val Accuracy')
