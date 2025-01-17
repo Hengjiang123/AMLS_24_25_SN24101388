@@ -38,7 +38,7 @@ breastMNIST.npz
 
 ## 1. Make sure download the whole project folder
 
-## 2. Make sure create the Datasets folder and put files BreastMNIST.npz AND bloodMNIST.npz at right position and right version.
+## 2. Make sure create the Datasets folder and put files breastMNIST.npz AND bloodMNIST.npz at right position and right version.
 
 ## 4. The project will run a light CNN and a ResNet-32 model. You better have CUDA or PyTorch GPU acceleration when training the models.
 
